@@ -21,10 +21,10 @@ const AuthComponent = () => {
                 });
                 setAddress(accounts[0]);
             } else {
-                setError("MetaMask не установлен!");
+                setError("MetaMask is not installing!");
             }
         } catch (err) {
-            setError("Ошибка получения адреса MetaMask");
+            setError("Error getting address MetaMask");
         }
     };
 
@@ -72,18 +72,15 @@ const AuthComponent = () => {
 
     return (
         <div>
-            <h1>Авторизация через MetaMask</h1>
+            <h1>Auth via MetaMask</h1>
 
-            {/* Кнопка для получения адреса MetaMask */}
-            <button onClick={getAddress}>Подключить MetaMask</button>
+            <button onClick={getAddress}>Connect MetaMask</button>
 
             {address && (
                 <div>
-                    <p>Ваш адрес MetaMask: {address}</p>
+                    <p>Your address MetaMask: {address}</p>
                     <button onClick={fetchMessage} disabled={loading}>
-                        {loading
-                            ? "Загружаем сообщение..."
-                            : "Получить сообщение"}
+                        {loading ? "Loading message..." : "Receive message"}
                     </button>
                 </div>
             )}
@@ -92,20 +89,20 @@ const AuthComponent = () => {
                 <div>
                     <p>{message}</p>
                     <button onClick={signMessage} disabled={loading}>
-                        {loading ? "Подписываем..." : "Подписать сообщение"}
+                        {loading ? "Signing..." : "Sign message"}
                     </button>
                 </div>
             )}
 
             {signature && (
                 <div>
-                    <p>Подписанное сообщение: {signature}</p>
+                    <p>Signed message: {signature}</p>
                 </div>
             )}
 
             {token && (
                 <div>
-                    <p>Токен доступа: {token}</p>
+                    <p>JWT Token: {token}</p>
                 </div>
             )}
 
