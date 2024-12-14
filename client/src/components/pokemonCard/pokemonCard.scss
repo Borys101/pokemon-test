@@ -1,0 +1,76 @@
+.pokemon-container {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2px;
+    padding: 10px;
+    row-gap: 7px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .pokemon-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        color: black;
+    }
+
+    .pokemon-type {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        font-size: 1rem;
+        color: #777;
+    }
+
+    .pokemon-image {
+        display: block;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 5px;
+    }
+
+    .characteristic {
+        display: flex;
+        justify-content: space-between;
+
+        p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    }
+
+    .start-button {
+        position: absolute;
+        bottom: -50px;
+        left: 50%;
+        width: 100%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    &.active .start-button {
+        bottom: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
