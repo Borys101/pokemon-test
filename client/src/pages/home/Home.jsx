@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PokemonCard from "../../components/pokemonCard/PokemonCard";
 import "./home.scss";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const [error, setError] = useState("");
