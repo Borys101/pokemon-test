@@ -79,12 +79,13 @@ const BattleScreen = ({ playerPokemon, socket }) => {
             </div>
             {!isBattleOver && (
                 <button
-                    disabled={!isPlayerTurn || isAttacking}
+                    disabled={!isPlayerTurn || isAttackInProgress}
                     className="attack-button"
                     onClick={handleAttackClick}
                 >
-                    {isAttacking ? "Attacking..." : "Attack"}
+                    {isAttackInProgress ? "Attacking..." : "Attack"}
                 </button>
+
             )}
         </div>
     );
