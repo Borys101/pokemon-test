@@ -11,6 +11,7 @@ const BattleScreen = ({ playerPokemon, socket }) => {
         player,
         handleAttack,
         error,
+        isAttackInProgress,
     } = useSocket(socket, playerPokemon);
 
     const [isAttacking, setIsAttacking] = useState(false);
@@ -85,7 +86,6 @@ const BattleScreen = ({ playerPokemon, socket }) => {
                 >
                     {isAttackInProgress ? "Attacking..." : "Attack"}
                 </button>
-
             )}
         </div>
     );
