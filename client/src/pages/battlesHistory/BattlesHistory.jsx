@@ -22,7 +22,7 @@ const BattlesHistory = () => {
             });
             const playerAddress = accounts[0];
             const response = await axios.get(
-                "http://localhost:5000/api/battles/battles-history",
+                "https://pokemon-test-backend.onrender.com/api/battles/battles-history",
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
