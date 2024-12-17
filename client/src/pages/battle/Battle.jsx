@@ -11,7 +11,7 @@ const BattlePage = () => {
 
     const [battleStarted, setBattleStarted] = useState(false);
 
-    const socket = io("http://localhost:5000", {
+    const socket = io("https://pokemon-test-backend.onrender.com", {
         transports: ["websocket"],
         auth: {
             token: localStorage.getItem("token"),
