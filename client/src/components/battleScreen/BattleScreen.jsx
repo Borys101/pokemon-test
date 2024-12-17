@@ -1,4 +1,5 @@
 import useSocket from "../../hooks/useSocket";
+import { useState } from "react";
 import "./battleScreen.scss";
 
 const BattleScreen = ({ playerPokemon, socket }) => {
