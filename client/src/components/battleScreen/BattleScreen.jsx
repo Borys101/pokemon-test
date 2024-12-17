@@ -1,4 +1,5 @@
 import useSocket from "../../hooks/useSocket";
+import { useState } from "react";
 import "./battleScreen.scss";
 
 const BattleScreen = ({ playerPokemon, socket }) => {
@@ -11,6 +12,18 @@ const BattleScreen = ({ playerPokemon, socket }) => {
         handleAttack,
         error,
     } = useSocket(socket, playerPokemon);
+
+    const [isAttacking, setIsAttacking] = useState(false);
+
+    const handleAttackClick = async () => {
+        if (isAttacking || !isPlayerTurn || isBattleOver) return;
+        setIsAttacking(true);
+        try {
+            await handleAttack();
+        } finally {
+            setIsAttacking(false);
+        }
+    };
 
     return (
         <div className="battle-screen">
@@ -66,12 +79,13 @@ const BattleScreen = ({ playerPokemon, socket }) => {
             </div>
             {!isBattleOver && (
                 <button
-                    disabled={!isPlayerTurn}
+                    disabled={!isPlayerTurn || isAttackInProgress}
                     className="attack-button"
-                    onClick={handleAttack}
+                    onClick={handleAttackClick}
                 >
-                    Attack
+                    {isAttackInProgress ? "Attacking..." : "Attack"}
                 </button>
+
             )}
         </div>
     );

@@ -79,6 +79,8 @@ export const setupBattleSocket = (io) => {
         });
 
         socket.on("attack", async ({ attacker }) => {
+            if (socket.data.isAttackInProgress) return;
+            socket.data.isAttackInProgress = true;
             if (!attacker || !["player", "computer"].includes(attacker)) {
                 socket.emit("error", { message: "Invalid attacker provided." });
                 return;
@@ -88,6 +90,7 @@ export const setupBattleSocket = (io) => {
 
                 if (!battleState || battleState.isBattleOver) {
                     socket.emit("error", { message: "Battle already over." });
+                    socket.data.isAttackInProgress = false;
                     return;
                 }
 
@@ -119,6 +122,8 @@ export const setupBattleSocket = (io) => {
             } catch (error) {
                 console.error("Error during attack:", error);
                 socket.emit("error", { message: "Attack failed", error });
+            } finally {
+                socket.data.isAttackInProgress = false;
             }
         });
 

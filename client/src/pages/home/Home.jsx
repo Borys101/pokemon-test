@@ -18,7 +18,7 @@ const Home = () => {
         try {
             setLoading(true);
             const response = await axios.get(
-                `http://localhost:5000/api/pokemons/get-pokemons-list?page=${currentPage}`,
+                `https://pokemon-test-backend.onrender.com/api/pokemons/get-pokemons-list?page=${currentPage}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
