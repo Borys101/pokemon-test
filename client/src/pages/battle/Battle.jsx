@@ -4,19 +4,19 @@ import { io } from "socket.io-client";
 import BattleScreen from "../../components/battleScreen/BattleScreen";
 import "./battle.scss";
 
-const socket = io("http://localhost:5000", {
-    transports: ["websocket"],
-    auth: {
-        token: localStorage.getItem("token"),
-    },
-});
-
 const BattlePage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { pokemon } = location.state || {};
 
     const [battleStarted, setBattleStarted] = useState(false);
+
+    const socket = io("http://localhost:5000", {
+        transports: ["websocket"],
+        auth: {
+            token: localStorage.getItem("token"),
+        },
+    });
 
     const getMetamaskUserId = async () => {
         const accounts = await window.ethereum.request({
@@ -46,7 +46,7 @@ const BattlePage = () => {
             socket.off("battleStart");
             socket.off("attackResult");
         };
-    }, [navigate, pokemon]);
+    }, [navigate, pokemon, socket]);
 
     if (!pokemon) {
         return <div>Loading...</div>;
