@@ -1,11 +1,21 @@
 import Web3 from "web3";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { handleError } from "../utils/errorHandler.js";
+import { validationResult, check } from "express-validator";
 
 const web3 = new Web3();
 
 export const generateMessage = async (req, res) => {
     try {
+        await check("address")
+            .isEthereumAddress()
+            .withMessage("Invalid Ethereum address")
+            .run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         const { address } = req.body;
         let user = await User.findOne({ publicAddress: address });
         if (user) {
@@ -21,22 +31,39 @@ export const generateMessage = async (req, res) => {
             res.json({ message, nonce });
         }
     } catch (err) {
-        console.error("Error generating message:", err);
-        res.status(500).json({ error: "Error generating message" });
+        handleError(err, res);
     }
 };
 
 export const verifySignature = async (req, res) => {
-    const { address, signature, nonce } = req.body;
-
     try {
+        await check("address")
+            .isEthereumAddress()
+            .withMessage("Invalid Ethereum address")
+            .run(req);
+        await check("signature")
+            .notEmpty()
+            .withMessage("Signature is required")
+            .run(req);
+        await check("nonce")
+            .notEmpty()
+            .withMessage("Nonce is required")
+            .isNumeric()
+            .withMessage("Nonce should be a number")
+            .run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const { address, signature, nonce } = req.body;
         const message = `Authenticate using MetaMask. Your nonce is: ${nonce}`;
 
         const recoveredAddress = web3.eth.accounts.recover(message, signature);
 
         if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
             const token = jwt.sign({ address }, process.env.JWT_SECRET, {
-                expiresIn: "24h",
+                expiresIn: "4h",
             });
 
             let user = await User.findOne({ publicAddress: address });
@@ -46,7 +73,6 @@ export const verifySignature = async (req, res) => {
                     nonce: Math.floor(Math.random() * 1000000).toString(),
                 });
                 await user.save();
-                console.log("User saved successfully");
             } else {
                 if (user.nonce !== nonce) {
                     return res.status(400).json({ error: "Invalid nonce" });
@@ -61,7 +87,6 @@ export const verifySignature = async (req, res) => {
             return res.status(400).json({ error: "Invalid signature" });
         }
     } catch (err) {
-        console.error("Error verifying signature:", err);
-        res.status(500).json({ error: "Error verifying signature" });
+        handleError(err, res);
     }
 };

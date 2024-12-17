@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     try {
         const token = req.headers["authorization"].split(" ")[1];
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -20,3 +20,5 @@ export default async (req, res, next) => {
             .send({ success: false, message: "Authentication failed" });
     }
 };
+
+export default authMiddleware;
