@@ -7,6 +7,7 @@ const useSocket = (socket, initialPlayerPokemon) => {
     const [isBattleOver, setIsBattleOver] = useState(false);
     const [player, setPlayer] = useState(initialPlayerPokemon);
     const [error, setError] = useState(null);
+    const [isAttackInProgress, setIsAttackInProgress] = useState(false);
 
     useEffect(() => {
         socket.on("battleStart", ({ computer: cp, firstMove }) => {
@@ -37,11 +38,13 @@ const useSocket = (socket, initialPlayerPokemon) => {
 
                 setIsPlayerTurn(attacker !== "player");
                 setIsBattleOver(isBattleOver);
+                setIsAttackInProgress(false);
             }
         );
 
         socket.on("error", (errorData) => {
             setError(errorData.message);
+            setIsAttackInProgress(false);
         });
 
         return () => {
@@ -52,7 +55,8 @@ const useSocket = (socket, initialPlayerPokemon) => {
     }, [socket]);
 
     const handleAttack = () => {
-        if (!isPlayerTurn || isBattleOver) return;
+        if (!isPlayerTurn || isBattleOver || isAttackInProgress) return;
+        setIsAttackInProgress(true);
         socket.emit("attack", { attacker: "player" });
     };
 
@@ -64,6 +68,7 @@ const useSocket = (socket, initialPlayerPokemon) => {
         player,
         handleAttack,
         error,
+        isAttackInProgress,
     };
 };
 
