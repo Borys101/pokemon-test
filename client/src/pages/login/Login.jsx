@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 import axios from "axios";
+import "./login.scss";
 
 const Login = () => {
     const [error, setError] = useState("");
@@ -53,23 +54,32 @@ const Login = () => {
                 throw new Error("Failed to authenticate with server.");
             }
         } catch (err) {
-            console.error(err);
-            setError(err.message || "An error occurred during authentication.");
+            if (err.response && err.response.data.errors) {
+                setError(err.response.data.errors.map((e) => e.msg).join(", "));
+            } else {
+                setError(
+                    err.message || "An error occurred during authentication."
+                );
+            }
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div>
-            <h2>Auth via MetaMask</h2>
+        <div className="login-container">
+            <h2 className="login-header">Auth via MetaMask</h2>
 
-            <button onClick={handleConnectMetaMask} disabled={loading}>
+            <button
+                className="connect-btn"
+                onClick={handleConnectMetaMask}
+                disabled={loading}
+            >
                 {loading ? "Authenticating..." : "Connect MetaMask"}
             </button>
 
             {error && (
-                <div style={{ color: "red" }}>
+                <div className="error-message">
                     <p>{error}</p>
                 </div>
             )}
