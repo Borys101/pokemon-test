@@ -12,6 +12,18 @@ const BattleScreen = ({ playerPokemon, socket }) => {
         error,
     } = useSocket(socket, playerPokemon);
 
+    const [isAttacking, setIsAttacking] = useState(false);
+
+    const handleAttackClick = async () => {
+        if (isAttacking || !isPlayerTurn || isBattleOver) return;
+        setIsAttacking(true);
+        try {
+            await handleAttack();
+        } finally {
+            setIsAttacking(false);
+        }
+    };
+
     return (
         <div className="battle-screen">
             {error && <div className="error-message">{error}</div>}
@@ -66,11 +78,11 @@ const BattleScreen = ({ playerPokemon, socket }) => {
             </div>
             {!isBattleOver && (
                 <button
-                    disabled={!isPlayerTurn}
+                    disabled={!isPlayerTurn || isAttacking}
                     className="attack-button"
-                    onClick={handleAttack}
+                    onClick={handleAttackClick}
                 >
-                    Attack
+                    {isAttacking ? "Attacking..." : "Attack"}
                 </button>
             )}
         </div>
