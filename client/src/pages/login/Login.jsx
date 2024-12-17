@@ -25,7 +25,7 @@ const Login = () => {
             const userAddress = accounts[0];
 
             const responseMessage = await axios.post(
-                "http://localhost:5000/api/auth/message",
+                "https://pokemon-test-backend.onrender.com/api/auth/message",
                 { address: userAddress }
             );
             const { message: serverMessage, nonce: serverNonce } =
@@ -38,7 +38,7 @@ const Login = () => {
             );
 
             const responseVerify = await axios.post(
-                "http://localhost:5000/api/auth/verify",
+                "https://pokemon-test-backend.onrender.com/api/auth/verify",
                 {
                     address: userAddress,
                     signature: userSignature,
